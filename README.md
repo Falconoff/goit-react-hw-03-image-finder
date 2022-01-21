@@ -1,3 +1,16 @@
+# GoIT React Homework-03: Image Finder
+
+[live page](https://Falconoff.github.io/goit-react-hw-03-image-finder)
+
+#
+
+Used:
+
+- [react-icons](https://react-icons.github.io/react-icons/)
+- [React-toastify](https://fkhadra.github.io/react-toastify/introduction)
+
+#
+
 # Getting Started with Create React App
 
 This project was bootstrapped with
