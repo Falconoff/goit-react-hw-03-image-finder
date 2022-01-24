@@ -1,18 +1,30 @@
+import PropTypes from 'prop-types';
+
 const API_KEY = '24083416-1e00017d670d2bdb130fa2702';
 const URL = 'https://pixabay.com/api';
 
-export default function fetchImgs({ query, page }) {
+export function fetchImgs(query, page) {
+  console.log('== FetchImgs == query:', query);
+  console.log('== FetchImgs == page:', page);
+
   return fetch(
     `${URL}/?image_type=photo&orientation=horizontal&q=${query}&page=${page}&per_page=12&key=${API_KEY}`,
   ).then(result => {
     if (result.ok) {
+      // console.log('result.json()', result.json());
       return result.json();
     }
     return Promise.reject(new Error(`There is nothing with ${query}`));
   });
-  // .then(result => this.setState({ imgArr: result.hits, status: 'resolved' }))
-  // .catch(error => this.setState({ error, status: 'rejected' }));
 }
+
+const api = { fetchImgs };
+export default api;
+
+fetchImgs.propTypes = {
+  query: PropTypes.string.isRequired,
+  page: PropTypes.number.isRequired,
+};
 
 //  ====================================================================
 /*

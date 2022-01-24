@@ -8,6 +8,7 @@ Used:
 
 - [react-icons](https://react-icons.github.io/react-icons/)
 - [React-toastify](https://fkhadra.github.io/react-toastify/introduction)
+- [spinners-react](https://www.npmjs.com/package/spinners-react)
 
 #
 
