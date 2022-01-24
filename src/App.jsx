@@ -35,24 +35,34 @@ class App extends Component {
     });
   };
 
-  fetchImages = (query, page) => {
-    setTimeout(() => {
-      // const query = this.state.searchQuery;
-      // console.log(fetchImgs);
+  fetchImages = (query, page, more = false) => {
+    // setTimeout(() => {
+    // const query = this.state.searchQuery;
+    // console.log(fetchImgs);
 
-      imagesAPI
-        .fetchImgs(query, page)
-        .then(result =>
-          this.setState({ imgArr: result.hits, status: 'resolved' }),
-        )
-        .catch(error => this.setState({ error, status: 'rejected' }));
-    }, 2000);
+    imagesAPI
+      .fetchImgs(query, page)
+      .then(result => {
+        if (!more) {
+          this.setState({ imgArr: result.hits, status: 'resolved' });
+        }
+        if (more) {
+          this.setState(prevState => {
+            return {
+              imgArr: [...prevState.imgArr, ...result.hits],
+              status: 'resolved',
+            };
+          });
+        }
+      })
+      .catch(error => this.setState({ error, status: 'rejected' }));
+    // }, 2000);
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (
-      prevState.searchQuery !== this.state.searchQuery ||
-      prevState.currenPage !== this.state.currenPage
+      prevState.searchQuery !== this.state.searchQuery
+      // || prevState.currenPage !== this.state.currenPage
     ) {
       // console.log('prevState.searchQuery', prevState.searchQuery);
       // console.log('this.state.searchQuery', this.state.searchQuery);
@@ -72,6 +82,12 @@ class App extends Component {
       //     )
       //     .catch(error => this.setState({ error, status: 'rejected' }));
       // }, 2000);
+    }
+
+    if (prevState.currenPage !== this.state.currenPage) {
+      this.setState({ status: 'pending' });
+
+      this.fetchImages(this.state.searchQuery, this.state.currenPage, true);
     }
   }
 
