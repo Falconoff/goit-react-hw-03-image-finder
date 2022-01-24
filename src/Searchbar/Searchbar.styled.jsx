@@ -6,6 +6,7 @@ export const SearchbarHeader = styled.header`
   position: sticky;
   z-index: 1100;
   display: flex;
+  margin-bottom: 16px;
   justify-content: center;
   align-items: center;
   min-height: 64px;

@@ -10,6 +10,7 @@ import Message from './Message';
 import imagesAPI from './service/apiService';
 import ShowLoader from './Loader';
 import ShowMoreBtn from './Button';
+import Modal from './Modal';
 
 // import { AppContainer } from './App.styled';
 import './App.css';
@@ -21,11 +22,26 @@ class App extends Component {
     error: null,
     status: 'idle',
     currenPage: 1,
+    showModal: false,
   };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.searchQuery !== this.state.searchQuery ||
+      prevState.currenPage !== this.state.currenPage
+    ) {
+      // console.log('prevState.searchQuery', prevState.searchQuery);
+      // console.log('this.state.searchQuery', this.state.searchQuery);
+
+      this.setState({ status: 'pending' });
+
+      this.fetchImages(this.state.searchQuery, this.state.currenPage);
+    }
+  }
 
   formSubmitHandler = searchQuery => {
     console.log('got from Form: ', searchQuery);
-    this.setState({ searchQuery });
+    this.setState({ imgArr: [], currenPage: 1, searchQuery });
   };
 
   loadMoreHandler = () => {
@@ -42,54 +58,26 @@ class App extends Component {
 
     imagesAPI
       .fetchImgs(query, page)
-      .then(result => {
-        if (!more) {
-          this.setState({ imgArr: result.hits, status: 'resolved' });
-        }
-        if (more) {
-          this.setState(prevState => {
-            return {
-              imgArr: [...prevState.imgArr, ...result.hits],
-              status: 'resolved',
-            };
-          });
-        }
+      .then(response => {
+        // if (!more) {
+        //   this.setState({ imgArr: response.hits, status: 'resolved' });
+        // }
+        // if (more) {
+        this.setState(prevState => ({
+          imgArr: [...prevState.imgArr, ...response.hits],
+          status: 'resolved',
+        }));
+        // }
       })
       .catch(error => this.setState({ error, status: 'rejected' }));
     // }, 2000);
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevState.searchQuery !== this.state.searchQuery
-      // || prevState.currenPage !== this.state.currenPage
-    ) {
-      // console.log('prevState.searchQuery', prevState.searchQuery);
-      // console.log('this.state.searchQuery', this.state.searchQuery);
-
-      this.setState({ status: 'pending' });
-
-      this.fetchImages(this.state.searchQuery, this.state.currenPage);
-
-      // setTimeout(() => {
-      //   const query = this.state.searchQuery;
-      //   // console.log(fetchImgs);
-
-      //   imagesAPI
-      //     .fetchImgs(query, 1)
-      //     .then(result =>
-      //       this.setState({ imgArr: result.hits, status: 'resolved' }),
-      //     )
-      //     .catch(error => this.setState({ error, status: 'rejected' }));
-      // }, 2000);
-    }
-
-    if (prevState.currenPage !== this.state.currenPage) {
-      this.setState({ status: 'pending' });
-
-      this.fetchImages(this.state.searchQuery, this.state.currenPage, true);
-    }
-  }
+  toggleModal = () => {
+    this.setState(prevState => ({
+      showModal: !prevState.showModal,
+    }));
+  };
 
   // -----------------------------------------------------------------
   // 	Паттерн "state machine" - машина состояний. 4 состояния (status):
@@ -99,7 +87,7 @@ class App extends Component {
   //  'rejected' - отклонено
 
   render() {
-    const { error, imgArr, status } = this.state;
+    const { error, imgArr, status, showModal } = this.state;
     const imgArrLength = imgArr.length;
 
     return (
@@ -115,7 +103,10 @@ class App extends Component {
         {status === 'pending' && <ShowLoader />}
 
         {status === 'resolved' && imgArrLength > 0 && (
-          <Gallery imgArr={imgArr} />
+          <>
+            <Gallery imgArr={imgArr} />
+            <ShowMoreBtn onClickHandler={this.loadMoreHandler} />
+          </>
         )}
 
         {status === 'resolved' && imgArrLength === 0 && (
@@ -124,7 +115,10 @@ class App extends Component {
 
         {status === 'rejected' && <Message text={error.message} />}
 
-        <ShowMoreBtn onClickHandler={this.loadMoreHandler} />
+        {showModal && <Modal onClose={this.toggleModal} />}
+        <button type="button" onClick={this.toggleModal}>
+          Open modal
+        </button>
       </>
     );
   }

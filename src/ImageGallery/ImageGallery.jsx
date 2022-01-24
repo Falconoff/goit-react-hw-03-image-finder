@@ -56,7 +56,7 @@ export default function Gallery({ imgArr }) {
       <ImageGallery>
         {imgArr.map(({ id, webformatURL, largeImageURL }) => (
           // console.log()
-          <ImageGalleryItem key={id} src={webformatURL} />
+          <ImageGalleryItem key={webformatURL} src={webformatURL} />
         ))}
       </ImageGallery>
     </div>
