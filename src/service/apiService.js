@@ -1,23 +1,32 @@
-import axios from 'axios';
+/*import axios from 'axios';
 import PropTypes from 'prop-types';
 
-const API_KEY = '24083416-1e00017d670d2bdb130fa2702';
-axios.defaults.baseURL = 'https://pixabay.com/api';
-axios.defaults.params = {
-  key: '24083416-1e00017d670d2bdb130fa2702',
-  per_page: 12,
-};
+// const API_KEY = '24083416-1e00017d670d2bdb130fa2702';
+const getImages = axios.create({
+  baseURL: 'https://pixabay.com/api',
+  params: {
+    key: '24083416-1e00017d670d2bdb130fa2702',
+    per_page: 12,
+    image_type: 'photo',
+    orientation: 'horizontal'
+  }
+})
 
-export async function fetchImgs(query, page) {
+async function fetchImgs(query = '', page=1) {
   // console.log('== FetchImgs == query:', query);
   // console.log('== FetchImgs == page:', page);
+  const params = {query, page}
+try{
+  const {data} = await getImages( '', {params});
+  return data;
+} catch (error) {console.log(`Not found ${query}`)}
 
-  const response = await fetch(
-    `${URL}/?image_type=photo&orientation=horizontal&q=${query}&page=${page}&per_page=12&key=${API_KEY}`,
-  );
-  const result = await response.json();
+  // const response = await fetch(
+  //   `${URL}/?image_type=photo&orientation=horizontal&q=${query}&page=${page}&per_page=12&key=${API_KEY}`,
+  // );
+  // const result = await response.json();
 
-  return result;
+  // return result;
 }
 
 const api = { fetchImgs };
@@ -27,8 +36,9 @@ fetchImgs.propTypes = {
   query: PropTypes.string.isRequired,
   page: PropTypes.number.isRequired,
 };
+*/
 //  =========================== it works =========================================
-/*
+
 import PropTypes from 'prop-types';
 
 const API_KEY = '24083416-1e00017d670d2bdb130fa2702';
@@ -56,39 +66,5 @@ fetchImgs.propTypes = {
   query: PropTypes.string.isRequired,
   page: PropTypes.number.isRequired,
 };
-*/
-//  ========================== very old ==========================================
-/*
-export default class PixabayApiService {
-  constructor() {
-    this.searchQuery = '';
-    this.page = 1;
-  }
 
-  // https://pixabay.com/api/?q=cat&page=1&key=your_key&image_type=photo&orientation=horizontal&per_page=12
-  fetchImages() {
-    return fetch(
-      `${URL}/?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=12&key=${API_KEY}`,
-    )
-      .then(response => response.json())
-      .then(({ hits }) => {
-        this.incrementPage();
-        return hits;
-      });
-  }
-  get query() {
-    return this.searchQuery;
-  }
-
-  set query(newQuery) {
-    this.searchQuery = newQuery;
-  }
-
-  incrementPage() {
-    this.page += 1;
-  }
-  resetPage() {
-    this.page = 1;
-  }
-}
-*/
+//  ====================================================================
