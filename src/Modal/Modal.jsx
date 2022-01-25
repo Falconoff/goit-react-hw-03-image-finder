@@ -35,8 +35,7 @@ export default class Modal extends Component {
     return (
       <Overlay onClick={this.overlayClickHandler}>
         <ModalContainer>
-          <img src="" alt="" />
-          <p>Hello World!</p>
+          <img src={this.props.srcLI} alt="" />
         </ModalContainer>
       </Overlay>
     );

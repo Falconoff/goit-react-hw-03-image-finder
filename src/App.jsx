@@ -3,6 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 // import { BallTriangle } from 'react-loader-spinner';
+// import axios from "axios";
 
 import Searchbar from './Searchbar';
 import Gallery from './ImageGallery';
@@ -23,6 +24,7 @@ class App extends Component {
     status: 'idle',
     currenPage: 1,
     showModal: false,
+    largeImgSrc: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -56,9 +58,8 @@ class App extends Component {
     // const query = this.state.searchQuery;
     // console.log(fetchImgs);
 
-    imagesAPI
-      .fetchImgs(query, page)
-      .then(response => {
+    try {
+      imagesAPI.fetchImgs(query, page).then(response => {
         // if (!more) {
         //   this.setState({ imgArr: response.hits, status: 'resolved' });
         // }
@@ -68,8 +69,14 @@ class App extends Component {
           status: 'resolved',
         }));
         // }
-      })
-      .catch(error => this.setState({ error, status: 'rejected' }));
+      });
+    } catch (error) {
+      this.setState({ error, status: 'rejected' });
+      // console.error(error);
+    }
+
+    // .catch(error => this.setState({ error, status: 'rejected' }));
+
     // }, 2000);
   };
 
@@ -77,6 +84,11 @@ class App extends Component {
     this.setState(prevState => ({
       showModal: !prevState.showModal,
     }));
+  };
+
+  handleImageClick = imgSrs => {
+    this.setState({ largeImgSrc: imgSrs });
+    this.toggleModal();
   };
 
   // -----------------------------------------------------------------
@@ -104,7 +116,9 @@ class App extends Component {
 
         {status === 'resolved' && imgArrLength > 0 && (
           <>
-            <Gallery imgArr={imgArr} />
+            {/* <Gallery imgArr={imgArr} /> */}
+            <Gallery imgArr={imgArr} onImgClick={this.handleImageClick} />
+
             <ShowMoreBtn onClickHandler={this.loadMoreHandler} />
           </>
         )}
@@ -115,10 +129,13 @@ class App extends Component {
 
         {status === 'rejected' && <Message text={error.message} />}
 
-        {showModal && <Modal onClose={this.toggleModal} />}
-        <button type="button" onClick={this.toggleModal}>
+        {showModal && (
+          <Modal onClose={this.toggleModal} srcLI={this.state.largeImgSrc} />
+        )}
+
+        {/* <button type="button" onClick={this.toggleModal}>
           Open modal
-        </button>
+        </button> */}
       </>
     );
   }

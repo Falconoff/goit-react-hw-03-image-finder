@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 
 import { GalleryListItem } from './ImageGalleryItem.styled';
 
-export default function ImageGalleryItem({ src }) {
+export default function ImageGalleryItem({ src, onImgClick, largeImgSrc }) {
   return (
-    <GalleryListItem>
+    <GalleryListItem onClick={() => onImgClick(largeImgSrc)}>
       <img src={src} alt="" />
     </GalleryListItem>
   );
