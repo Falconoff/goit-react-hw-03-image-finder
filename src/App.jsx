@@ -112,16 +112,18 @@ class App extends Component {
           <Message text={'Please, enter what you want to see'} />
         )}
 
-        {status === 'pending' && <ShowLoader />}
+        {imgArrLength > 0 && (
+          <Gallery imgArr={imgArr} onImgClick={this.handleImageClick} />
+        )}
 
         {status === 'resolved' && imgArrLength > 0 && (
           <>
-            {/* <Gallery imgArr={imgArr} /> */}
-            <Gallery imgArr={imgArr} onImgClick={this.handleImageClick} />
-
+            {/* <Gallery imgArr={imgArr} onImgClick={this.handleImageClick} /> */}
             <ShowMoreBtn onClickHandler={this.loadMoreHandler} />
           </>
         )}
+
+        {status === 'pending' && <ShowLoader />}
 
         {status === 'resolved' && imgArrLength === 0 && (
           <Message text={`No matches found for "${this.state.searchQuery}"`} />

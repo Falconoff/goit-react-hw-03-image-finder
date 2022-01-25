@@ -1,9 +1,10 @@
-/*import axios from 'axios';
+/*
+import axios from 'axios';
 import PropTypes from 'prop-types';
 
 // const API_KEY = '24083416-1e00017d670d2bdb130fa2702';
 const getImages = axios.create({
-  baseURL: 'https://pixabay.com/api',
+  baseURL: 'https://pixabay.com/api/',
   params: {
     key: '24083416-1e00017d670d2bdb130fa2702',
     per_page: 12,
@@ -12,14 +13,18 @@ const getImages = axios.create({
   }
 })
 
-async function fetchImgs(query = '', page=1) {
-  // console.log('== FetchImgs == query:', query);
-  // console.log('== FetchImgs == page:', page);
+async function fetchImgs(query = '', page = 1) {
+  console.log('== FetchImgs == query:', query);
+  console.log('== FetchImgs == page:', page);
+
   const params = {query, page}
 try{
-  const {data} = await getImages( '', {params});
+  const data = await getImages( '', params);
+  console.log('=== axios === data:',data);
   return data;
-} catch (error) {console.log(`Not found ${query}`)}
+} catch (error) {
+  console.log(`Not found ${query}`)
+}
 
   // const response = await fetch(
   //   `${URL}/?image_type=photo&orientation=horizontal&q=${query}&page=${page}&per_page=12&key=${API_KEY}`,
