@@ -1,9 +1,6 @@
 import { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-// import { BallTriangle } from 'react-loader-spinner';
-// import axios from "axios";
 
 import Searchbar from './Searchbar';
 import Gallery from './ImageGallery';
@@ -13,7 +10,6 @@ import ShowLoader from './Loader';
 import ShowMoreBtn from './Button';
 import Modal from './Modal';
 
-// import { AppContainer } from './App.styled';
 import './App.css';
 
 class App extends Component {
@@ -32,9 +28,6 @@ class App extends Component {
       prevState.searchQuery !== this.state.searchQuery ||
       prevState.currenPage !== this.state.currenPage
     ) {
-      // console.log('prevState.searchQuery', prevState.searchQuery);
-      // console.log('this.state.searchQuery', this.state.searchQuery);
-
       this.setState({ status: 'pending' });
 
       this.fetchImages(this.state.searchQuery, this.state.currenPage);
@@ -42,39 +35,29 @@ class App extends Component {
   }
 
   formSubmitHandler = searchQuery => {
-    console.log('got from Form: ', searchQuery);
     this.setState({ imgArr: [], currenPage: 1, searchQuery });
   };
 
   loadMoreHandler = () => {
-    console.log('loadMoreHandler');
     this.setState(prevState => {
       return { currenPage: prevState.currenPage + 1 };
     });
   };
 
   fetchImages = (query, page) => {
-    setTimeout(() => {
-      // const query = this.state.searchQuery;
-      // console.log(fetchImgs);
+    // setTimeout for to see the Loader
+    // setTimeout(() => {
+    imagesAPI
+      .fetchImgs(query, page)
+      .then(response => {
+        this.setState(prevState => ({
+          imgArr: [...prevState.imgArr, ...response],
+          status: 'resolved',
+        }));
+      })
 
-      try {
-        imagesAPI.fetchImgs(query, page).then(response => {
-          console.log('response ====', response);
-          this.setState(prevState => ({
-            imgArr: [...prevState.imgArr, ...response.hits],
-            status: 'resolved',
-          }));
-        });
-      } catch (error) {
-        console.log('error in App === ', error);
-
-        this.setState({ error, status: 'rejected' });
-        // console.error(error);
-      }
-
-      // .catch(error => this.setState({ error, status: 'rejected' }));
-    }, 2000);
+      .catch(error => this.setState({ error, status: 'rejected' }));
+    // }, 2000);
   };
 
   toggleModal = () => {
@@ -103,7 +86,6 @@ class App extends Component {
       <>
         <ToastContainer autoClose={3000} />
         <Searchbar onFormSubmit={this.formSubmitHandler} />
-        {/* ====================================== */}
 
         {status === 'idle' && (
           <Message text={'Please, enter what you want to see'} />
@@ -128,10 +110,6 @@ class App extends Component {
         {showModal && (
           <Modal onClose={this.toggleModal} srcLI={this.state.largeImgSrc} />
         )}
-
-        {/* <button type="button" onClick={this.toggleModal}>
-          Open modal
-        </button> */}
       </>
     );
   }

@@ -29,9 +29,7 @@ export const SearchForm = styled.form`
   border-radius: 3px;
   overflow: hidden;
 `;
-// BsSearch
-// background-image: url('https://image.flaticon.com/icons/svg/149/149852.svg');
-//
+
 export const SearchFormBtn = styled.button`
   display: inline-block;
   width: 48px;

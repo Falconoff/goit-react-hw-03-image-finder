@@ -20,11 +20,9 @@ export default class Searchbar extends Component {
 
   onSubmit = evt => {
     evt.preventDefault();
-    console.log('on Submit from Searchbar:', this.state.inputValue);
 
     // for empty query
     if (this.state.inputValue.trim() === '') {
-      // alert('Please, enter your query');
       toast.warn('Please, enter your query');
       return;
     }
@@ -38,7 +36,6 @@ export default class Searchbar extends Component {
   render() {
     return (
       <SearchbarHeader>
-        {/* <ToastContainer /> */}
         <SearchForm onSubmit={this.onSubmit}>
           <SearchFormBtn type="submit">
             <BsSearch style={{ width: 24, height: 24, fill: 'blue' }} />
@@ -58,21 +55,3 @@ export default class Searchbar extends Component {
     );
   }
 }
-
-/*
-<header class="searchbar">
-  <form class="form">
-    <button type="submit" class="button">
-      <span class="button-label">Search</span>
-    </button>
-
-    <input
-      class="input"
-      type="text"
-      autocomplete="off"
-      autofocus
-      placeholder="Search images and photos"
-    />
-  </form>
-</header>;
-*/
