@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 
 export const BtnContainer = styled.div`
-  padding-top: 20px;
-  padding-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   width: 100%;
 `;
 
 export const Button = styled.button`
   display: block;
-  padding: 10px 20px;
+  padding: 13px 20px;
   margin: 0 auto;
 
   border-radius: 2px;
@@ -32,5 +32,4 @@ export const Button = styled.button`
   :focus {
     background-color: #303f9f;
   }
-}
 `;

@@ -53,31 +53,28 @@ class App extends Component {
     });
   };
 
-  fetchImages = (query, page, more = false) => {
-    // setTimeout(() => {
-    // const query = this.state.searchQuery;
-    // console.log(fetchImgs);
+  fetchImages = (query, page) => {
+    setTimeout(() => {
+      // const query = this.state.searchQuery;
+      // console.log(fetchImgs);
 
-    try {
-      imagesAPI.fetchImgs(query, page).then(response => {
-        // if (!more) {
-        //   this.setState({ imgArr: response.hits, status: 'resolved' });
-        // }
-        // if (more) {
-        this.setState(prevState => ({
-          imgArr: [...prevState.imgArr, ...response.hits],
-          status: 'resolved',
-        }));
-        // }
-      });
-    } catch (error) {
-      this.setState({ error, status: 'rejected' });
-      // console.error(error);
-    }
+      try {
+        imagesAPI.fetchImgs(query, page).then(response => {
+          console.log('response ====', response);
+          this.setState(prevState => ({
+            imgArr: [...prevState.imgArr, ...response.hits],
+            status: 'resolved',
+          }));
+        });
+      } catch (error) {
+        console.log('error in App === ', error);
 
-    // .catch(error => this.setState({ error, status: 'rejected' }));
+        this.setState({ error, status: 'rejected' });
+        // console.error(error);
+      }
 
-    // }, 2000);
+      // .catch(error => this.setState({ error, status: 'rejected' }));
+    }, 2000);
   };
 
   toggleModal = () => {
@@ -117,10 +114,7 @@ class App extends Component {
         )}
 
         {status === 'resolved' && imgArrLength > 0 && (
-          <>
-            {/* <Gallery imgArr={imgArr} onImgClick={this.handleImageClick} /> */}
-            <ShowMoreBtn onClickHandler={this.loadMoreHandler} />
-          </>
+          <ShowMoreBtn onClickHandler={this.loadMoreHandler} />
         )}
 
         {status === 'pending' && <ShowLoader />}

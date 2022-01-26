@@ -1,8 +1,47 @@
-/*
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
-// const API_KEY = '24083416-1e00017d670d2bdb130fa2702';
+const API_KEY = '24083416-1e00017d670d2bdb130fa2702';
+axios.defaults.baseURL = 'https://pixabay321.com/api/';
+
+async function fetchImgs(query, page) {
+  const options = new URLSearchParams({
+    key: API_KEY,
+    q: query,
+    page: page,
+    per_page: 12,
+    image_type: 'photo',
+    orientation: 'horizontal',
+  });
+
+  // return axios.get(`?${options}`).then(response => {
+  //   if (response.status === 200) {
+  //     return response.data;
+  //   }
+  //   return Promise.reject(new Error('Something went wrong'));
+  // });
+  try {
+    const response = await axios.get(`?${options}`);
+    return response.data;
+  } catch (error) {
+    console.log('error in apiService === ', error);
+    console.log('error.message === ', error.message);
+
+    // return new Error('Something went wrong');
+    return Promise.reject(new Error('Something went wrong'));
+  }
+}
+
+const api = { fetchImgs };
+export default api;
+
+fetchImgs.propTypes = {
+  query: PropTypes.string.isRequired,
+  page: PropTypes.number.isRequired,
+};
+
+/*
+
 const getImages = axios.create({
   baseURL: 'https://pixabay.com/api/',
   params: {
@@ -43,7 +82,7 @@ fetchImgs.propTypes = {
 };
 */
 //  =========================== it works =========================================
-
+/*
 import PropTypes from 'prop-types';
 
 const API_KEY = '24083416-1e00017d670d2bdb130fa2702';
@@ -71,5 +110,5 @@ fetchImgs.propTypes = {
   query: PropTypes.string.isRequired,
   page: PropTypes.number.isRequired,
 };
-
+*/
 //  ====================================================================
