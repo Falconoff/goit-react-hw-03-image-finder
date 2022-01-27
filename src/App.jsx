@@ -21,16 +21,19 @@ class App extends Component {
     currenPage: 1,
     showModal: false,
     largeImgSrc: '',
+    totalPages: 0,
+    perPage: 12,
   };
 
   componentDidUpdate(prevProps, prevState) {
+    const { searchQuery, currenPage, perPage } = this.state;
     if (
-      prevState.searchQuery !== this.state.searchQuery ||
-      prevState.currenPage !== this.state.currenPage
+      prevState.searchQuery !== searchQuery ||
+      prevState.currenPage !== currenPage
     ) {
       this.setState({ status: 'pending' });
 
-      this.fetchImages(this.state.searchQuery, this.state.currenPage);
+      this.fetchImages(searchQuery, currenPage, perPage);
     }
   }
 
@@ -44,15 +47,16 @@ class App extends Component {
     });
   };
 
-  fetchImages = (query, page) => {
+  fetchImages = (query, page, perPage) => {
     // setTimeout for to see the Loader
     // setTimeout(() => {
     imagesAPI
-      .fetchImgs(query, page)
+      .fetchImgs(query, page, perPage)
       .then(response => {
         this.setState(prevState => ({
-          imgArr: [...prevState.imgArr, ...response],
+          imgArr: [...prevState.imgArr, ...response.hits],
           status: 'resolved',
+          totalPages: Math.ceil(response.total / perPage),
         }));
       })
 
@@ -79,7 +83,8 @@ class App extends Component {
   //  'rejected' - отклонено
 
   render() {
-    const { error, imgArr, status, showModal } = this.state;
+    const { error, imgArr, status, showModal, totalPages, currenPage } =
+      this.state;
     const imgArrLength = imgArr.length;
 
     return (
@@ -95,9 +100,11 @@ class App extends Component {
           <Gallery imgArr={imgArr} onImgClick={this.handleImageClick} />
         )}
 
-        {status === 'resolved' && imgArrLength > 0 && (
-          <ShowMoreBtn onClickHandler={this.loadMoreHandler} />
-        )}
+        {status === 'resolved' &&
+          imgArrLength > 0 &&
+          totalPages !== currenPage && (
+            <ShowMoreBtn onClickHandler={this.loadMoreHandler} />
+          )}
 
         {status === 'pending' && <ShowLoader />}
 

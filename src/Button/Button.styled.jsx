@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const BtnContainer = styled.div`
-  margin-top: 20px;
+  margin-top: 0;
   margin-bottom: 20px;
   width: 100%;
 `;
